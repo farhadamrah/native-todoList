@@ -9,6 +9,7 @@ import {
   View,
   Keyboard,
   ScrollView,
+  Button,
 } from 'react-native';
 
 export default function App() {
@@ -16,7 +17,7 @@ export default function App() {
   const [taskItems, setTaskItems] = useState([]);
 
   const handleAddTask = () => {
-    setTaskItems([...taskItems, task]);
+    setTaskItems((prevState) => [...prevState, task]);
     setTask(null);
     Keyboard.dismiss();
   };
@@ -60,20 +61,23 @@ export default function App() {
 
       <View style={styles.border} />
 
-      <View style={styles.tasksWrapper}>
-        <ScrollView>
-          {taskItems.map((item, index) => {
-            return (
-              <TouchableOpacity key={index} onPress={() => completeTask(index)}>
-                <View style={styles.items} key={Math.random()}>
-                  <View style={styles.circle}></View>
-                  <Text style={styles.itemText}>{item}</Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
-      </View>
+      <ScrollView style={styles.tasksWrapper}>
+        {taskItems.map((item, index) => {
+          return (
+            <TouchableOpacity key={index} onPress={() => completeTask(index)}>
+              <View style={styles.items} key={Math.random()}>
+                <View style={styles.circle}></View>
+                <Text style={styles.itemText}>{item}</Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+        <TouchableOpacity onPress={() => setTaskItems([])}>
+          <View style={styles.clearBtn}>
+            <Text style={styles.btnText}>Clear All</Text>
+          </View>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
@@ -86,9 +90,9 @@ const styles = StyleSheet.create({
     display: 'flex',
   },
   tasksWrapper: {
-    // paddingTop: 150,
     marginVertical: 10,
     paddingHorizontal: 20,
+    height: '65%',
   },
   sectionTitle: {
     color: 'white',
@@ -159,5 +163,20 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
     marginVertical: 30,
+  },
+  clearBtn: {
+    backgroundColor: 'white',
+    width: 180,
+    padding: 15,
+    color: 'white',
+    borderRadius: 60,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  btnText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    letterSpacing: 0.8,
+    textAlign: 'center',
   },
 });
